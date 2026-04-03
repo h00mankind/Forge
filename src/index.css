@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --surface-0: #08090b;
-  --surface-1: #0f1114;
-  --surface-2: #16181d;
-  --surface-3: #1e2028;
-  --accent: #e8722a;
-  --accent-muted: rgba(232, 114, 42, 0.12);
-  --text-primary: #eaeaed;
-  --text-secondary: #8e929e;
-  --text-tertiary: #4e5260;
+  --surface-0: 8 9 11;
+  --surface-1: 15 17 20;
+  --surface-2: 22 24 29;
+  --surface-3: 30 32 40;
+  --accent: 250 42 50;
+  --accent-muted: rgba(250, 42, 50, 0.12);
+  --text-primary: 234 234 237;
+  --text-secondary: 142 146 158;
+  --text-tertiary: 78 82 96;
   --border: rgba(255, 255, 255, 0.06);
   --border-strong: rgba(255, 255, 255, 0.12);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -19,27 +19,26 @@
 }
 
 .light {
-  --surface-0: #f5f5f7;
-  --surface-1: #ffffff;
-  --surface-2: #ededf0;
-  --surface-3: #e0e0e5;
-  --accent: #d4621e;
-  --accent-muted: rgba(212, 98, 30, 0.08);
-  --text-primary: #0e0f14;
-  --text-secondary: #55586a;
-  --text-tertiary: #9497a6;
+  --surface-0: 245 245 247;
+  --surface-1: 255 255 255;
+  --surface-2: 237 237 240;
+  --surface-3: 224 224 229;
+  --accent: 217 35 42;
+  --accent-muted: rgba(217, 35, 42, 0.08);
+  --text-primary: 14 15 20;
+  --text-secondary: 85 88 106;
+  --text-tertiary: 148 151 166;
   --border: rgba(0, 0, 0, 0.06);
   --border-strong: rgba(0, 0, 0, 0.1);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--surface-3) transparent;
+  scrollbar-color: rgb(var(--surface-3)) transparent;
 }
 
 body {
-  font-family: "Urbanist", system-ui, sans-serif;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: "Geist", system-ui, sans-serif;
   overflow: hidden;
 }
 

@@ -12,7 +12,6 @@ import {
 import LayerAccordion from "./LayerAccordion";
 import PresetChips from "./PresetChips";
 import TextInImageFields from "./TextInImageFields";
-import SubStyleBar from "./SubStyleBar";
 import {
   compositionPresets,
   lightingPresets,
@@ -42,11 +41,6 @@ function ph(category: StyleCategoryId | null, key: PlaceholderKey): string {
 export default memo(function BuilderPanel({ layers, setLayer, styleCategory }: Props) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <SubStyleBar
-        activeCategory={styleCategory}
-        onSelectStyle={(v) => setLayer("style", v)}
-      />
-
       <div className="flex-1 overflow-y-auto p-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           <LayerAccordion

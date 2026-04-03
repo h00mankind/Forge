@@ -2,8 +2,6 @@ import { memo } from "react";
 import {
   RotateCcw,
   ClipboardPaste,
-  PanelLeftOpen,
-  PanelRightOpen,
   Shuffle,
   Wand2,
   Settings,
@@ -18,10 +16,6 @@ interface Props {
   onAIGenerate: () => void;
   aiLoading: boolean;
   onOpenSettings: () => void;
-  leftOpen: boolean;
-  rightOpen: boolean;
-  onToggleLeft: () => void;
-  onToggleRight: () => void;
 }
 
 const ICON_BTN =
@@ -34,32 +28,17 @@ export default memo(function Header({
   onAIGenerate,
   aiLoading,
   onOpenSettings,
-  leftOpen,
-  rightOpen,
-  onToggleLeft,
-  onToggleRight,
 }: Props) {
   return (
     <header className="relative flex items-center justify-between border-b border-border px-5 py-3 grain">
-      <div className="flex items-center gap-3">
-        {!leftOpen && (
-          <button
-            onClick={onToggleLeft}
-            aria-label="Show style panel"
-            className={`${ICON_BTN} hidden md:grid`}
-          >
-            <PanelLeftOpen size={14} />
-          </button>
-        )}
-        <div className="flex items-center gap-2.5">
-          <div className="relative grid h-7 w-7 place-items-center bg-accent/15 text-accent">
-            <div className="absolute inset-0 bg-accent/10 blur-md" />
-            <Wand2 size={13} className="relative" />
-          </div>
-          <h1 className="font-display text-[15px] font-bold tracking-tight">
-            Forge
-          </h1>
+      <div className="flex items-center gap-2.5">
+        <div className="relative grid h-7 w-7 place-items-center bg-accent/15 text-accent">
+          <div className="absolute inset-0 bg-accent/10 blur-md" />
+          <Wand2 size={13} className="relative" />
         </div>
+        <h1 className="font-display text-[15px] font-bold tracking-tight">
+          Forge
+        </h1>
       </div>
 
       <div className="flex items-center gap-1">
@@ -109,15 +88,6 @@ export default memo(function Header({
           <Settings size={13} />
         </button>
         <ThemeToggle />
-        {!rightOpen && (
-          <button
-            onClick={onToggleRight}
-            aria-label="Show output panel"
-            className={`${ICON_BTN} hidden md:grid`}
-          >
-            <PanelRightOpen size={14} />
-          </button>
-        )}
       </div>
     </header>
   );

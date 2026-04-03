@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useState, useRef, useEffect, memo } from "react";
-import { FileText, Layers, PanelRightClose } from "lucide-react";
+import { FileText, Layers, PanelRightClose, Image, Wand2, Eraser, ArrowRightLeft, Type } from "lucide-react";
 import OutputToggle from "./OutputToggle";
 import type { OutputMode } from "./OutputToggle";
 import CopyButton from "./CopyButton";
@@ -13,13 +13,22 @@ import {
 import { useTextMeasure } from "../hooks/useTextMeasure";
 import type { PromptLayers, PromptType } from "../hooks/usePromptStore";
 
+const PURPOSE_OPTIONS: { id: PromptType; label: string; icon: typeof Image }[] = [
+  { id: "text-to-image", label: "Text → Image", icon: Image },
+  { id: "multimodal", label: "Multimodal", icon: Wand2 },
+  { id: "inpainting", label: "Inpainting", icon: Eraser },
+  { id: "style-transfer", label: "Style Transfer", icon: ArrowRightLeft },
+  { id: "text-rendering", label: "Text Render", icon: Type },
+];
+
 interface Props {
   layers: PromptLayers;
   promptType: PromptType;
+  onTypeChange: (type: PromptType) => void;
   onCollapse: () => void;
 }
 
-export default memo(function PreviewPanel({ layers, promptType, onCollapse }: Props) {
+export default memo(function PreviewPanel({ layers, promptType, onTypeChange, onCollapse }: Props) {
   const [mode, setMode] = useState<OutputMode>("labeled");
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -63,31 +72,61 @@ export default memo(function PreviewPanel({ layers, promptType, onCollapse }: Pr
   const getCopyText = useCallback(() => displayText, [displayText]);
 
   return (
-    <div className="flex h-full flex-col border-t md:border-t-0">
-      <div className="flex items-center justify-between border-b border-border px-5 py-3">
-        <div className="flex items-center gap-2.5">
-          <FileText size={13} className="text-text-tertiary" />
-          <span className="text-[13px] font-semibold text-text-secondary">
+    <div className="flex h-full flex-col border-t md:border-t-0 overflow-y-auto">
+      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
+          Purpose
+        </span>
+        <button
+          onClick={onCollapse}
+          aria-label="Hide output panel"
+          className="hidden md:grid h-6 w-6 place-items-center text-text-tertiary
+                     hover:text-text-secondary hover:bg-surface-2
+                     transition-[color,background-color] duration-150 ease-out active:scale-95"
+        >
+          <PanelRightClose size={12} />
+        </button>
+      </div>
+
+      <div className="border-b border-border px-3 pb-3">
+        <div className="flex flex-col gap-px">
+          {PURPOSE_OPTIONS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => onTypeChange(id)}
+              className={`flex items-center gap-2.5 px-3 py-2 text-left text-[13px] font-medium
+                          transition-[color,background-color] duration-150 ease-out
+                          active:scale-[0.98]
+                          ${id === promptType
+                            ? "bg-accent/12 text-accent"
+                            : "text-text-secondary hover:bg-surface-2/70 hover:text-text-primary"
+                          }`}
+            >
+              <Icon size={13} className="flex-shrink-0" />
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5">
+          <FileText size={13} className="flex-shrink-0 text-text-tertiary" />
+          <span className="flex-shrink-0 text-[13px] font-semibold text-text-secondary">
             Output
           </span>
-          <span className="flex items-center gap-1 bg-surface-2/60 px-2 py-0.5 text-[10px] font-semibold tabular-nums text-text-tertiary border border-border">
-            <Layers size={9} />
-            {filled}/{TOTAL_LAYERS}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
           <OutputToggle value={mode} onChange={setMode} />
-          <CopyButton getText={getCopyText} />
-          <button
-            onClick={onCollapse}
-            aria-label="Hide output panel"
-            className="hidden md:grid h-6 w-6 place-items-center text-text-tertiary
-                       hover:text-text-secondary hover:bg-surface-2
-                       transition-[color,background-color] duration-150 ease-out active:scale-95"
-          >
-            <PanelRightClose size={12} />
-          </button>
         </div>
+        <div className="flex flex-shrink-0 items-center gap-2">
+          <CopyButton getText={getCopyText} />
+        </div>
+      </div>
+
+      <div className="flex items-center px-5 py-2">
+        <span className="flex items-center gap-1 border border-border bg-surface-2/60 px-2 py-0.5 text-[10px] font-semibold tabular-nums text-text-tertiary">
+          <Layers size={9} />
+          {filled}/{TOTAL_LAYERS}
+        </span>
       </div>
 
       <div ref={containerRef} className="flex-1 overflow-y-auto p-5">

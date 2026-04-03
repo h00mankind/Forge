@@ -17,25 +17,25 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Syne"', "system-ui", "sans-serif"],
-        sans: ['"Urbanist"', "system-ui", "sans-serif"],
-        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+        display: ['"Instrument Serif"', "Georgia", "serif"],
+        sans: ['"Geist"', "system-ui", "sans-serif"],
+        mono: ['"Geist Mono"', "ui-monospace", "monospace"],
       },
       colors: {
         surface: {
-          0: "var(--surface-0)",
-          1: "var(--surface-1)",
-          2: "var(--surface-2)",
-          3: "var(--surface-3)",
+          0: "rgb(var(--surface-0) / <alpha-value>)",
+          1: "rgb(var(--surface-1) / <alpha-value>)",
+          2: "rgb(var(--surface-2) / <alpha-value>)",
+          3: "rgb(var(--surface-3) / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "var(--accent)",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
           muted: "var(--accent-muted)",
         },
         text: {
-          primary: "var(--text-primary)",
-          secondary: "var(--text-secondary)",
-          tertiary: "var(--text-tertiary)",
+          primary: "rgb(var(--text-primary) / <alpha-value>)",
+          secondary: "rgb(var(--text-secondary) / <alpha-value>)",
+          tertiary: "rgb(var(--text-tertiary) / <alpha-value>)",
         },
         border: {
           DEFAULT: "var(--border)",

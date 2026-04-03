@@ -6,6 +6,7 @@ import PreviewPanel from "./components/PreviewPanel";
 import PastePromptModal from "./components/PastePromptModal";
 import SettingsModal from "./components/SettingsModal";
 import ResizeHandle from "./components/ResizeHandle";
+import CollapsedStrip from "./components/CollapsedStrip";
 import { usePromptStore } from "./hooks/usePromptStore";
 import { templates } from "./data/templates";
 import { generateRandomPrompt } from "./utils/randomPrompt";
@@ -108,36 +109,28 @@ export default function App() {
         onAIGenerate={handleAIGenerate}
         aiLoading={aiLoading}
         onOpenSettings={openSettings}
-        leftOpen={leftOpen}
-        rightOpen={rightOpen}
-        onToggleLeft={showLeft}
-        onToggleRight={showRight}
       />
 
       <div className="flex flex-1 min-h-0 flex-col md:flex-row">
-        <div
-          className={`
-            w-full md:h-full overflow-hidden border-r border-border
-            transition-[width,min-width,opacity] duration-200 ease-out
-            ${leftOpen
-              ? "opacity-100"
-              : "md:w-0 md:min-w-0 opacity-0 pointer-events-none md:pointer-events-none md:border-r-0"}
-          `}
-          style={leftOpen ? { width: leftWidth, minWidth: leftWidth, flexShrink: 0 } : undefined}
-        >
-          <StylePanel
-            promptType={state.type}
-            onTypeChange={handleTypeChange}
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            styleValue={state.layers.style}
-            onStyleChange={(v) => setLayer("style", v)}
-            onCollapse={hideLeft}
-          />
-        </div>
-
-        {leftOpen && (
-          <ResizeHandle side="left" onResize={handleLeftResize} />
+        {leftOpen ? (
+          <>
+            <div
+              className="w-full md:h-full overflow-hidden border-r border-border"
+              style={{ width: leftWidth, minWidth: leftWidth, flexShrink: 0 }}
+            >
+              <StylePanel
+                activeCategory={activeCategory}
+                onCategoryChange={setActiveCategory}
+                styleValue={state.layers.style}
+                onStyleChange={(v) => setLayer("style", v)}
+                onCollapse={hideLeft}
+                onSelectStyle={(v) => setLayer("style", v)}
+              />
+            </div>
+            <ResizeHandle side="left" onResize={handleLeftResize} />
+          </>
+        ) : (
+          <CollapsedStrip side="left" label="Style" onExpand={showLeft} />
         )}
 
         <div className="flex-1 min-w-0 md:h-full h-[50vh]">
@@ -148,26 +141,24 @@ export default function App() {
           />
         </div>
 
-        {rightOpen && (
-          <ResizeHandle side="right" onResize={handleRightResize} />
+        {rightOpen ? (
+          <>
+            <ResizeHandle side="right" onResize={handleRightResize} />
+            <div
+              className="w-full md:h-full overflow-hidden border-l border-border"
+              style={{ width: rightWidth, minWidth: rightWidth, flexShrink: 0 }}
+            >
+              <PreviewPanel
+                layers={state.layers}
+                promptType={state.type}
+                onTypeChange={handleTypeChange}
+                onCollapse={hideRight}
+              />
+            </div>
+          </>
+        ) : (
+          <CollapsedStrip side="right" label="Output" onExpand={showRight} />
         )}
-
-        <div
-          className={`
-            w-full md:h-full overflow-hidden border-l border-border
-            transition-[width,min-width,opacity] duration-200 ease-out
-            ${rightOpen
-              ? "opacity-100"
-              : "md:w-0 md:min-w-0 opacity-0 pointer-events-none md:pointer-events-none md:border-l-0"}
-          `}
-          style={rightOpen ? { width: rightWidth, minWidth: rightWidth, flexShrink: 0 } : undefined}
-        >
-          <PreviewPanel
-            layers={state.layers}
-            promptType={state.type}
-            onCollapse={hideRight}
-          />
-        </div>
       </div>
 
       <PastePromptModal

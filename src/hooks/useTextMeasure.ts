@@ -6,8 +6,8 @@ interface MeasureResult {
   lineCount: number;
 }
 
-const FONT_MONO = '400 13px "JetBrains Mono", ui-monospace, monospace';
-const FONT_MONO_SM = '400 12px "JetBrains Mono", ui-monospace, monospace';
+const FONT_MONO = '400 13px "Geist Mono", ui-monospace, monospace';
+const FONT_MONO_SM = '400 12px "Geist Mono", ui-monospace, monospace';
 const LINE_HEIGHT = 1.7;
 const LINE_HEIGHT_SM = 1.6;
 
