@@ -1,11 +1,11 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, memo } from "react";
 
 interface Props {
   onResize: (delta: number) => void;
   side: "left" | "right";
 }
 
-export default function ResizeHandle({ onResize, side }: Props) {
+export default memo(function ResizeHandle({ onResize, side }: Props) {
   const dragging = useRef(false);
   const lastX = useRef(0);
 
@@ -38,11 +38,11 @@ export default function ResizeHandle({ onResize, side }: Props) {
   return (
     <div
       onPointerDown={onPointerDown}
-      className="hidden md:flex w-1.5 flex-shrink-0 cursor-col-resize items-center justify-center
-                 group hover:bg-accent/10 active:bg-accent/20
+      className="hidden md:flex w-1 flex-shrink-0 cursor-col-resize items-center justify-center
+                 group hover:bg-accent/8 active:bg-accent/15
                  transition-colors duration-100"
     >
-      <div className="h-8 w-0.5 bg-border group-hover:bg-accent/50 group-active:bg-accent transition-colors duration-100" />
+      <div className="h-6 w-px bg-border group-hover:bg-accent/40 group-active:bg-accent transition-colors duration-100" />
     </div>
   );
-}
+});

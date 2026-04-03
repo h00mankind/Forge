@@ -15,16 +15,15 @@ import { useToast } from "./components/Toast";
 import type { PromptType, PromptLayers } from "./hooks/usePromptStore";
 import type { StyleCategoryId } from "./data/presets";
 
-const LEFT_MIN = 180;
+const LEFT_MIN = 200;
 const LEFT_MAX = 360;
-const LEFT_DEFAULT = 240;
-const RIGHT_MIN = 300;
+const LEFT_DEFAULT = 250;
+const RIGHT_MIN = 320;
 const RIGHT_MAX = 560;
 const RIGHT_DEFAULT = 420;
 
 export default function App() {
-  const { state, setType, setLayer, loadLayers, reset } =
-    usePromptStore();
+  const { state, setType, setLayer, loadLayers, reset } = usePromptStore();
 
   const [pasteOpen, setPasteOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -91,23 +90,31 @@ export default function App() {
     }
   }, [activeCategory, loadLayers, showToast]);
 
+  const openPaste = useCallback(() => setPasteOpen(true), []);
+  const closePaste = useCallback(() => setPasteOpen(false), []);
+  const openSettings = useCallback(() => setSettingsOpen(true), []);
+  const closeSettings = useCallback(() => setSettingsOpen(false), []);
+  const showLeft = useCallback(() => setLeftOpen(true), []);
+  const hideLeft = useCallback(() => setLeftOpen(false), []);
+  const showRight = useCallback(() => setRightOpen(true), []);
+  const hideRight = useCallback(() => setRightOpen(false), []);
+
   return (
     <div className="flex h-screen flex-col bg-surface-0">
       <Header
         onReset={reset}
-        onPaste={() => setPasteOpen(true)}
+        onPaste={openPaste}
         onSurprise={handleSurprise}
         onAIGenerate={handleAIGenerate}
         aiLoading={aiLoading}
-        onOpenSettings={() => setSettingsOpen(true)}
+        onOpenSettings={openSettings}
         leftOpen={leftOpen}
         rightOpen={rightOpen}
-        onToggleLeft={() => setLeftOpen(true)}
-        onToggleRight={() => setRightOpen(true)}
+        onToggleLeft={showLeft}
+        onToggleRight={showRight}
       />
 
       <div className="flex flex-1 min-h-0 flex-col md:flex-row">
-        {/* Panel 1: Purpose + Style */}
         <div
           className={`
             w-full md:h-full overflow-hidden border-r border-border
@@ -125,7 +132,7 @@ export default function App() {
             onCategoryChange={setActiveCategory}
             styleValue={state.layers.style}
             onStyleChange={(v) => setLayer("style", v)}
-            onCollapse={() => setLeftOpen(false)}
+            onCollapse={hideLeft}
           />
         </div>
 
@@ -133,7 +140,6 @@ export default function App() {
           <ResizeHandle side="left" onResize={handleLeftResize} />
         )}
 
-        {/* Panel 2: Refine */}
         <div className="flex-1 min-w-0 md:h-full h-[50vh]">
           <BuilderPanel
             layers={state.layers}
@@ -146,7 +152,6 @@ export default function App() {
           <ResizeHandle side="right" onResize={handleRightResize} />
         )}
 
-        {/* Panel 3: Output */}
         <div
           className={`
             w-full md:h-full overflow-hidden border-l border-border
@@ -160,21 +165,21 @@ export default function App() {
           <PreviewPanel
             layers={state.layers}
             promptType={state.type}
-            onCollapse={() => setRightOpen(false)}
+            onCollapse={hideRight}
           />
         </div>
       </div>
 
       <PastePromptModal
         open={pasteOpen}
-        onClose={() => setPasteOpen(false)}
+        onClose={closePaste}
         onImport={handleImport}
-        onOpenSettings={() => setSettingsOpen(true)}
+        onOpenSettings={openSettings}
       />
 
       <SettingsModal
         open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
+        onClose={closeSettings}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, memo } from "react";
 import { Copy, Check } from "lucide-react";
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
   label?: string;
 }
 
-export default function CopyButton({ getText, label = "Copy" }: Props) {
+export default memo(function CopyButton({ getText, label = "Copy" }: Props) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
@@ -22,17 +22,16 @@ export default function CopyButton({ getText, label = "Copy" }: Props) {
   return (
     <button
       onClick={handleCopy}
-      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold
                   transition-[transform,color,background-color,border-color] duration-150 ease-out
                   active:scale-[0.97] border
-                  ${
-                    copied
-                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                      : "border-border bg-surface-2 text-text-secondary hover:bg-surface-3 hover:text-text-primary"
+                  ${copied
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                    : "border-border bg-surface-2/60 text-text-secondary hover:bg-surface-3 hover:text-text-primary"
                   }`}
     >
-      {copied ? <Check size={12} /> : <Copy size={12} />}
+      {copied ? <Check size={11} /> : <Copy size={11} />}
       {copied ? "Copied" : label}
     </button>
   );
-}
+});

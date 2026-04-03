@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
-export default function ThemeToggle() {
+export default memo(function ThemeToggle() {
   const [dark, setDark] = useState(true);
 
   useEffect(() => {
@@ -21,12 +21,11 @@ export default function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="relative grid h-8 w-8 place-items-center rounded-lg
-                 bg-surface-2 text-text-secondary transition-[transform,background-color] duration-150 ease-out
-                 hover:bg-surface-3 hover:text-text-primary
-                 active:scale-95"
+      className="grid h-8 w-8 place-items-center text-text-tertiary
+                 transition-[transform,background-color,color] duration-150 ease-out
+                 hover:bg-surface-2 hover:text-text-secondary active:scale-95"
     >
-      {dark ? <Sun size={16} /> : <Moon size={16} />}
+      {dark ? <Sun size={14} /> : <Moon size={14} />}
     </button>
   );
-}
+});

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
   User,
   Zap,
@@ -38,7 +39,7 @@ function ph(category: StyleCategoryId | null, key: PlaceholderKey): string {
   return defaultPlaceholders[key];
 }
 
-export default function BuilderPanel({ layers, setLayer, styleCategory }: Props) {
+export default memo(function BuilderPanel({ layers, setLayer, styleCategory }: Props) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <SubStyleBar
@@ -46,10 +47,10 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
         onSelectStyle={(v) => setLayer("style", v)}
       />
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           <LayerAccordion
-            icon={<User size={15} />}
+            icon={<User size={14} />}
             title="Subject"
             description="Who or what is the main focus"
             filled={!!layers.subject.trim()}
@@ -60,7 +61,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           />
 
           <LayerAccordion
-            icon={<Zap size={15} />}
+            icon={<Zap size={14} />}
             title="Action / Pose"
             description="What is happening"
             filled={!!layers.action.trim()}
@@ -70,7 +71,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           />
 
           <LayerAccordion
-            icon={<MapPin size={15} />}
+            icon={<MapPin size={14} />}
             title="Setting"
             description="Where, what environment"
             filled={!!layers.setting.trim()}
@@ -80,7 +81,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           />
 
           <LayerAccordion
-            icon={<Frame size={15} />}
+            icon={<Frame size={14} />}
             title="Composition"
             description="Framing, angle, distance"
             filled={!!layers.composition.trim()}
@@ -95,7 +96,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           </LayerAccordion>
 
           <LayerAccordion
-            icon={<Lightbulb size={15} />}
+            icon={<Lightbulb size={14} />}
             title="Lighting"
             description="How the scene is lit"
             filled={!!layers.lighting.trim()}
@@ -110,7 +111,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           </LayerAccordion>
 
           <LayerAccordion
-            icon={<Camera size={15} />}
+            icon={<Camera size={14} />}
             title="Camera / Lens"
             description="Hardware and focal length"
             filled={!!layers.camera.trim()}
@@ -125,7 +126,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           </LayerAccordion>
 
           <LayerAccordion
-            icon={<Palette size={15} />}
+            icon={<Palette size={14} />}
             title="Color / Film"
             description="Grading, film stock, palette"
             filled={!!layers.color.trim()}
@@ -140,7 +141,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           </LayerAccordion>
 
           <LayerAccordion
-            icon={<Box size={15} />}
+            icon={<Box size={14} />}
             title="Material / Texture"
             description="Physical surfaces and finishes"
             filled={!!layers.material.trim()}
@@ -154,7 +155,7 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
             />
           </LayerAccordion>
 
-          <div className="lg:col-span-2 border border-border bg-transparent p-4">
+          <div className="lg:col-span-2 border border-border bg-transparent p-5">
             <TextInImageFields
               textContent={layers.textContent}
               textFont={layers.textFont}
@@ -164,8 +165,8 @@ export default function BuilderPanel({ layers, setLayer, styleCategory }: Props)
           </div>
         </div>
 
-        <div className="h-4 flex-shrink-0" />
+        <div className="h-5 flex-shrink-0" />
       </div>
     </div>
   );
-}
+});

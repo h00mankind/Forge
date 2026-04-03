@@ -7,7 +7,7 @@ export default {
     borderRadius: {
       none: "0",
       DEFAULT: "0",
-      sm: "0",
+      sm: "2px",
       md: "0",
       lg: "0",
       xl: "0",
@@ -17,7 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"DM Sans"', "system-ui", "sans-serif"],
+        display: ['"Syne"', "system-ui", "sans-serif"],
+        sans: ['"Urbanist"', "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
       },
       colors: {

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -14,7 +14,7 @@ interface Props {
   defaultOpen?: boolean;
 }
 
-export default function LayerAccordion({
+export default memo(function LayerAccordion({
   icon,
   title,
   description,
@@ -35,7 +35,7 @@ export default function LayerAccordion({
     if (!contentRef.current) return;
     if (open) {
       setHeight(contentRef.current.scrollHeight);
-      const timer = setTimeout(() => setHeight(undefined), 280);
+      const timer = setTimeout(() => setHeight(undefined), 260);
       return () => clearTimeout(timer);
     } else {
       setHeight(contentRef.current.scrollHeight);
@@ -47,39 +47,35 @@ export default function LayerAccordion({
 
   return (
     <div
-      className={`rounded-xl border transition-[border-color] duration-200 ease-out ${
-        open ? "border-border-strong bg-surface-1/50" : "border-border bg-transparent"
+      className={`border transition-[border-color,background-color] duration-200 ease-out ${
+        open
+          ? "border-border-strong bg-surface-1/40"
+          : "border-border bg-transparent hover:border-border-strong/50"
       }`}
     >
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setOpen((o) => !o);
-          }
-        }}
         aria-expanded={open}
         className="flex w-full items-center gap-3 px-4 py-3 text-left
                    transition-[background-color] duration-150 ease-out
-                   hover:bg-surface-2/50 rounded-xl active:scale-[0.998]"
+                   hover:bg-surface-2/30 active:scale-[0.998]"
       >
         <span className="flex-shrink-0 text-text-tertiary">{icon}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-text-primary">
+            <span className="text-[13px] font-semibold text-text-primary">
               {title}
             </span>
             {filled && (
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50" />
+              <span className="h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]" />
             )}
           </div>
-          <span className="text-[11px] text-text-tertiary">{description}</span>
+          <span className="text-[11px] text-text-tertiary leading-tight">{description}</span>
         </div>
         <ChevronRight
-          size={14}
-          className={`flex-shrink-0 text-text-tertiary transition-transform duration-200 ease-out ${
+          size={13}
+          className={`flex-shrink-0 text-text-tertiary/50 transition-transform duration-200 ease-out ${
             open ? "rotate-90" : ""
           }`}
         />
@@ -89,7 +85,7 @@ export default function LayerAccordion({
         ref={contentRef}
         aria-hidden={!open}
         style={{ height: height !== undefined ? `${height}px` : "auto" }}
-        className={`overflow-hidden transition-[height,opacity] duration-[280ms] ease-out ${
+        className={`overflow-hidden transition-[height,opacity] duration-[260ms] ease-out ${
           !open ? "pointer-events-none" : ""
         }`}
       >
@@ -99,15 +95,15 @@ export default function LayerAccordion({
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
             rows={2}
-            className="w-full resize-none rounded-lg border border-border bg-surface-0 px-3 py-2.5 text-sm
-                       text-text-primary placeholder:text-text-tertiary outline-none
+            className="w-full resize-none border border-border bg-surface-0 px-3 py-2.5 text-[13px]
+                       text-text-primary placeholder:text-text-tertiary/40 outline-none
                        transition-[border-color,box-shadow] duration-150 ease-out
-                       focus:border-accent/50 focus:ring-1 focus:ring-accent/20
-                       min-h-[60px]"
+                       focus:border-accent/40 focus:ring-1 focus:ring-accent/15
+                       min-h-[56px]"
           />
           {children}
         </div>
       </div>
     </div>
   );
-}
+});

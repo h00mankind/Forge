@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useRef, useEffect, memo } from "react";
 import { FileText, Layers, PanelRightClose } from "lucide-react";
 import OutputToggle from "./OutputToggle";
 import type { OutputMode } from "./OutputToggle";
@@ -10,6 +10,7 @@ import {
   filledLayerCount,
   TOTAL_LAYERS,
 } from "../utils/assemblePrompt";
+import { useTextMeasure } from "../hooks/useTextMeasure";
 import type { PromptLayers, PromptType } from "../hooks/usePromptStore";
 
 interface Props {
@@ -18,8 +19,21 @@ interface Props {
   onCollapse: () => void;
 }
 
-export default function PreviewPanel({ layers, promptType, onCollapse }: Props) {
+export default memo(function PreviewPanel({ layers, promptType, onCollapse }: Props) {
   const [mode, setMode] = useState<OutputMode>("labeled");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const { measure } = useTextMeasure();
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setContainerWidth(entry.contentRect.width);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const labeledText = useMemo(
     () => assembleTextPrompt(layers, promptType),
@@ -40,18 +54,24 @@ export default function PreviewPanel({ layers, promptType, onCollapse }: Props) 
   const filled = filledLayerCount(layers);
   const isEmpty = filled === 0;
 
+  const estimatedHeight = useMemo(() => {
+    if (isEmpty || containerWidth <= 0) return 0;
+    const variant = mode === "json" ? "json" as const : "default" as const;
+    return measure(displayText, containerWidth - 40, variant).height;
+  }, [displayText, containerWidth, mode, isEmpty, measure]);
+
   const getCopyText = useCallback(() => displayText, [displayText]);
 
   return (
     <div className="flex h-full flex-col border-t md:border-t-0">
-      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
-        <div className="flex items-center gap-2">
-          <FileText size={14} className="text-text-tertiary" />
-          <span className="text-xs font-medium text-text-secondary">
+      <div className="flex items-center justify-between border-b border-border px-5 py-3">
+        <div className="flex items-center gap-2.5">
+          <FileText size={13} className="text-text-tertiary" />
+          <span className="text-[13px] font-semibold text-text-secondary">
             Output
           </span>
-          <span className="flex items-center gap-1 rounded-md bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-text-tertiary">
-            <Layers size={10} />
+          <span className="flex items-center gap-1 bg-surface-2/60 px-2 py-0.5 text-[10px] font-semibold tabular-nums text-text-tertiary border border-border">
+            <Layers size={9} />
             {filled}/{TOTAL_LAYERS}
           </span>
         </div>
@@ -62,36 +82,37 @@ export default function PreviewPanel({ layers, promptType, onCollapse }: Props) 
             onClick={onCollapse}
             aria-label="Hide output panel"
             className="hidden md:grid h-6 w-6 place-items-center text-text-tertiary
-                       hover:text-text-primary hover:bg-surface-2
+                       hover:text-text-secondary hover:bg-surface-2
                        transition-[color,background-color] duration-150 ease-out active:scale-95"
           >
-            <PanelRightClose size={13} />
+            <PanelRightClose size={12} />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div ref={containerRef} className="flex-1 overflow-y-auto p-5">
         {isEmpty ? (
           <div className="flex h-full items-center justify-center">
             <div className="text-center">
-              <div className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-xl bg-surface-2 text-text-tertiary">
-                <FileText size={18} />
+              <div className="mx-auto mb-3 grid h-10 w-10 place-items-center bg-surface-2/50 text-text-tertiary/60">
+                <FileText size={16} />
               </div>
-              <p className="text-sm font-medium text-text-tertiary">
+              <p className="text-[13px] font-medium text-text-tertiary">
                 Start building your prompt
               </p>
-              <p className="mt-1 text-xs text-text-tertiary/60">
-                Fill in layers on the left to see your assembled prompt here
+              <p className="mt-1.5 text-[11px] text-text-tertiary/50 max-w-[200px] mx-auto leading-relaxed">
+                Fill in layers to see your assembled prompt here
               </p>
             </div>
           </div>
         ) : (
           <pre
-            className={`whitespace-pre-wrap break-words font-mono leading-relaxed ${
+            className={`whitespace-pre-wrap break-words font-mono leading-[1.7] ${
               mode === "json"
-                ? "text-xs text-accent"
+                ? "text-[12px] text-accent/90"
                 : "text-[13px] text-text-primary"
             }`}
+            style={estimatedHeight > 0 ? { minHeight: estimatedHeight } : undefined}
           >
             {displayText}
           </pre>
@@ -99,4 +120,4 @@ export default function PreviewPanel({ layers, promptType, onCollapse }: Props) 
       </div>
     </div>
   );
-}
+});
