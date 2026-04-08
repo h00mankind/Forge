@@ -6,6 +6,7 @@ export default memo(function ThemeToggle() {
 
   useEffect(() => {
     const root = document.documentElement;
+    root.classList.add("theme");
     if (dark) {
       root.classList.add("dark");
       root.classList.remove("light");
