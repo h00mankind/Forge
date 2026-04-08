@@ -14,8 +14,8 @@ export default memo(function PresetChips({ presets, onSelect }: Props) {
           key={p.id}
           type="button"
           onClick={() => onSelect(p.prompt)}
-          className="border border-border bg-surface-1/60 px-2.5 py-1 text-[11px] font-medium
-                     text-text-secondary transition-[transform,color,border-color,background-color] duration-150 ease-out
+          className="surface-lift micro-glow border border-border bg-surface-1/60 px-2.5 py-1 text-[11px] font-medium
+                     text-text-secondary
                      hover:border-accent/30 hover:bg-accent-muted hover:text-accent
                      active:scale-[0.97]"
         >

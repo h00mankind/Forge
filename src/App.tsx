@@ -8,6 +8,7 @@ import SettingsModal from "./components/SettingsModal";
 import ResizeHandle from "./components/ResizeHandle";
 import CollapsedStrip from "./components/CollapsedStrip";
 import { usePromptStore } from "./hooks/usePromptStore";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 import { templates } from "./data/templates";
 import { generateRandomPrompt } from "./utils/randomPrompt";
 import { generateCreativePrompt, hasAPIKey } from "./utils/ai";
@@ -37,6 +38,7 @@ export default function App() {
   const [rightWidth, setRightWidth] = useState(RIGHT_DEFAULT);
 
   const { showToast } = useToast();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const handleLeftResize = useCallback((delta: number) => {
     setLeftWidth((w) => Math.min(LEFT_MAX, Math.max(LEFT_MIN, w + delta)));
@@ -101,7 +103,7 @@ export default function App() {
   const hideRight = useCallback(() => setRightOpen(false), []);
 
   return (
-    <div className="flex h-screen flex-col bg-surface-0">
+    <div className="app-shell flex h-screen flex-col bg-surface-0">
       <Header
         onReset={reset}
         onPaste={openPaste}
@@ -115,8 +117,12 @@ export default function App() {
         {leftOpen ? (
           <>
             <div
-              className="w-full md:h-full overflow-hidden border-r border-border"
-              style={{ width: leftWidth, minWidth: leftWidth, flexShrink: 0 }}
+              className="panel-enter flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden border-b border-border md:h-full md:min-w-0 md:flex-none md:flex-shrink-0 md:border-b-0 md:border-r md:border-border"
+              style={
+                isDesktop
+                  ? { width: leftWidth, minWidth: leftWidth, flexShrink: 0 }
+                  : undefined
+              }
             >
               <StylePanel
                 activeCategory={activeCategory}
@@ -133,7 +139,7 @@ export default function App() {
           <CollapsedStrip side="left" label="Style" onExpand={showLeft} />
         )}
 
-        <div className="flex-1 min-w-0 md:h-full h-[50vh]">
+        <div className="panel-enter-delayed flex min-h-0 w-full min-w-0 flex-1 flex-col border-b border-border md:h-full md:flex-1 md:border-b-0">
           <BuilderPanel
             layers={state.layers}
             setLayer={setLayer}
@@ -145,8 +151,12 @@ export default function App() {
           <>
             <ResizeHandle side="right" onResize={handleRightResize} />
             <div
-              className="w-full md:h-full overflow-hidden border-l border-border"
-              style={{ width: rightWidth, minWidth: rightWidth, flexShrink: 0 }}
+              className="panel-enter flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden border-border md:h-full md:min-w-0 md:flex-none md:flex-shrink-0 md:border-l md:border-border"
+              style={
+                isDesktop
+                  ? { width: rightWidth, minWidth: rightWidth, flexShrink: 0 }
+                  : undefined
+              }
             >
               <PreviewPanel
                 layers={state.layers}

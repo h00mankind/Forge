@@ -22,16 +22,15 @@ export default memo(function StylePanel({
 }: Props) {
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-surface-1/30">
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+      <div className="reveal-in flex items-center justify-between px-4 pt-4 pb-2">
         <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
           Style
         </span>
         <button
           onClick={onCollapse}
           aria-label="Hide style panel"
-          className="hidden md:grid h-6 w-6 place-items-center text-text-tertiary
-                     hover:text-text-secondary hover:bg-surface-2
-                     transition-[color,background-color] duration-150 ease-out active:scale-95"
+          className="surface-lift hidden md:grid h-6 w-6 place-items-center text-text-tertiary
+                     hover:text-text-secondary hover:bg-surface-2"
         >
           <PanelLeftClose size={12} />
         </button>
@@ -45,9 +44,7 @@ export default memo(function StylePanel({
               <div key={cat.id}>
                 <button
                   onClick={() => onCategoryChange(cat.id)}
-                  className={`flex w-full items-center justify-between px-3 py-2 text-left text-[13px] font-medium
-                              transition-[color,background-color] duration-150 ease-out
-                              active:scale-[0.98]
+                  className={`surface-lift flex w-full items-center justify-between px-3 py-2 text-left text-[13px] font-medium
                               ${isActive
                                 ? "bg-accent/12 text-accent"
                                 : "text-text-secondary hover:bg-surface-2/70 hover:text-text-primary"
@@ -60,19 +57,18 @@ export default memo(function StylePanel({
                     </span>
                     <ChevronDown
                       size={11}
-                      className={`text-text-tertiary/50 transition-transform duration-150 ${isActive ? "rotate-180" : ""}`}
+                      className={`text-text-tertiary/50 transition-transform duration-[220ms] ease-[var(--ease-smooth)] ${isActive ? "rotate-180" : ""}`}
                     />
                   </div>
                 </button>
                 {isActive && (
-                  <div className="flex flex-wrap gap-1 px-3 py-2">
+                  <div className="stagger-in flex flex-wrap gap-1 px-3 py-2">
                     {cat.styles.map((s) => (
                       <button
                         key={s.id}
                         onClick={() => onSelectStyle(s.prompt)}
-                        className="border border-border bg-surface-0 px-2 py-1
+                        className="surface-lift micro-glow border border-border bg-surface-0 px-2 py-1
                                    text-[11px] font-medium text-text-secondary whitespace-nowrap
-                                   transition-[color,border-color,background-color,transform] duration-150 ease-out
                                    hover:border-accent/30 hover:bg-accent-muted hover:text-accent
                                    active:scale-[0.97]"
                       >

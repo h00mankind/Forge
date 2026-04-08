@@ -40,9 +40,9 @@ function ph(category: StyleCategoryId | null, key: PlaceholderKey): string {
 
 export default memo(function BuilderPanel({ layers, setLayer, styleCategory }: Props) {
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       <div className="flex-1 overflow-y-auto p-5">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="stagger-in grid grid-cols-1 gap-2 lg:grid-cols-2">
           <LayerAccordion
             icon={<User size={14} />}
             title="Subject"
@@ -149,7 +149,7 @@ export default memo(function BuilderPanel({ layers, setLayer, styleCategory }: P
             />
           </LayerAccordion>
 
-          <div className="lg:col-span-2 border border-border bg-transparent p-5">
+          <div className="surface-lift lg:col-span-2 border border-border bg-transparent p-5">
             <TextInImageFields
               textContent={layers.textContent}
               textFont={layers.textFont}

@@ -72,17 +72,16 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
   const getCopyText = useCallback(() => displayText, [displayText]);
 
   return (
-    <div className="flex h-full flex-col border-t md:border-t-0 overflow-y-auto">
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+    <div className="flex h-full min-h-0 flex-col overflow-y-auto">
+      <div className="reveal-in flex items-center justify-between px-4 pt-4 pb-2">
         <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
           Purpose
         </span>
         <button
           onClick={onCollapse}
           aria-label="Hide output panel"
-          className="hidden md:grid h-6 w-6 place-items-center text-text-tertiary
-                     hover:text-text-secondary hover:bg-surface-2
-                     transition-[color,background-color] duration-150 ease-out active:scale-95"
+          className="surface-lift hidden md:grid h-6 w-6 place-items-center text-text-tertiary
+                     hover:text-text-secondary hover:bg-surface-2"
         >
           <PanelRightClose size={12} />
         </button>
@@ -94,9 +93,7 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
             <button
               key={id}
               onClick={() => onTypeChange(id)}
-              className={`flex items-center gap-2.5 px-3 py-2 text-left text-[13px] font-medium
-                          transition-[color,background-color] duration-150 ease-out
-                          active:scale-[0.98]
+              className={`surface-lift flex items-center gap-2.5 px-3 py-2 text-left text-[13px] font-medium
                           ${id === promptType
                             ? "bg-accent/12 text-accent"
                             : "text-text-secondary hover:bg-surface-2/70 hover:text-text-primary"
@@ -131,7 +128,7 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
 
       <div ref={containerRef} className="flex-1 overflow-y-auto p-5">
         {isEmpty ? (
-          <div className="flex h-full items-center justify-center">
+          <div className="reveal-in flex h-full items-center justify-center">
             <div className="text-center">
               <div className="mx-auto mb-3 grid h-10 w-10 place-items-center bg-surface-2/50 text-text-tertiary/60">
                 <FileText size={16} />
@@ -146,10 +143,11 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
           </div>
         ) : (
           <pre
+            key={`${mode}-${promptType}`}
             className={`whitespace-pre-wrap break-words font-mono leading-[1.7] ${
               mode === "json"
-                ? "text-[12px] text-accent/90"
-                : "text-[13px] text-text-primary"
+                ? "reveal-in text-[12px] text-accent/90"
+                : "reveal-in text-[13px] text-text-primary"
             }`}
             style={estimatedHeight > 0 ? { minHeight: estimatedHeight } : undefined}
           >

@@ -20,9 +20,7 @@ export default memo(function OutputToggle({ value, onChange }: Props) {
         <button
           key={m.id}
           onClick={() => onChange(m.id)}
-          className={`px-2.5 py-1 text-[11px] font-semibold tracking-wide
-                      transition-[color,background-color] duration-150 ease-out
-                      active:scale-[0.97]
+          className={`surface-lift relative px-2.5 py-1 text-[11px] font-semibold tracking-wide
                       ${m.id === value
                         ? "bg-surface-0 text-text-primary shadow-sm"
                         : "text-text-tertiary hover:text-text-secondary"

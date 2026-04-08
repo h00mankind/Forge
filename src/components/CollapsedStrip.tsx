@@ -15,9 +15,9 @@ export default memo(function CollapsedStrip({ side, label, onExpand }: Props) {
     <button
       onClick={onExpand}
       aria-label={`Show ${label.toLowerCase()} panel`}
-      className={`hidden md:flex flex-col items-center flex-shrink-0
+      className={`panel-enter surface-lift hidden md:flex flex-col items-center flex-shrink-0
                   w-9 h-full ${borderClass} border-border bg-surface-1/20
-                  hover:bg-surface-2/50 transition-[background-color] duration-150 ease-out
+                  hover:bg-surface-2/50
                   cursor-pointer group`}
     >
       <div

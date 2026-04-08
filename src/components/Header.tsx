@@ -19,7 +19,7 @@ interface Props {
 }
 
 const ICON_BTN =
-  "grid h-8 w-8 place-items-center text-text-tertiary transition-[transform,background-color,color] duration-150 ease-out hover:bg-surface-2 hover:text-text-secondary active:scale-95";
+  "surface-lift micro-glow grid h-8 w-8 place-items-center text-text-tertiary hover:bg-surface-2 hover:text-text-secondary";
 
 export default memo(function Header({
   onReset,
@@ -31,7 +31,7 @@ export default memo(function Header({
 }: Props) {
   return (
     <header className="relative flex items-center justify-between border-b border-border px-5 py-3 grain">
-      <div className="flex items-center gap-2.5">
+      <div className="reveal-in flex items-center gap-2.5">
         <div className="relative grid h-7 w-7 place-items-center bg-accent/15 text-accent">
           <div className="absolute inset-0 bg-accent/10 blur-md" />
           <Wand2 size={13} className="relative" />
@@ -41,15 +41,13 @@ export default memo(function Header({
         </h1>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="stagger-in flex items-center gap-1">
         <button
           onClick={onSurprise}
           aria-label="Generate random prompt"
-          className="inline-flex h-8 items-center gap-1.5 px-3
+          className="surface-lift micro-glow inline-flex h-8 items-center gap-1.5 px-3
                      text-text-secondary text-[13px] font-medium
-                     transition-[transform,background-color,color] duration-150 ease-out
-                     hover:bg-surface-2 hover:text-text-primary
-                     active:scale-[0.97]"
+                     hover:bg-surface-2 hover:text-text-primary"
         >
           <Shuffle size={12} />
           <span className="hidden sm:inline">Surprise</span>
@@ -58,9 +56,7 @@ export default memo(function Header({
           onClick={onAIGenerate}
           disabled={aiLoading}
           aria-label="AI Generate prompt"
-          className={`inline-flex h-8 items-center gap-1.5 px-3 text-[13px] font-semibold
-                     transition-[transform,background-color,color,opacity] duration-150 ease-out
-                     active:scale-[0.97]
+          className={`surface-lift micro-glow inline-flex h-8 items-center gap-1.5 px-3 text-[13px] font-semibold
                      ${aiLoading
                        ? "bg-accent/20 text-accent/70 cursor-wait"
                        : "bg-accent text-white hover:brightness-110"}`}
@@ -72,11 +68,9 @@ export default memo(function Header({
         <button
           onClick={onPaste}
           aria-label="Import prompt"
-          className="inline-flex h-8 items-center gap-1.5 px-2.5
+          className="surface-lift micro-glow inline-flex h-8 items-center gap-1.5 px-2.5
                      text-text-tertiary text-[13px] font-medium
-                     transition-[transform,background-color,color] duration-150 ease-out
-                     hover:bg-surface-2 hover:text-text-secondary
-                     active:scale-[0.97]"
+                     hover:bg-surface-2 hover:text-text-secondary"
         >
           <ClipboardPaste size={12} />
           <span className="hidden sm:inline">Import</span>

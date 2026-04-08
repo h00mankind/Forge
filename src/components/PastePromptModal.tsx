@@ -189,21 +189,21 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 animate-[reduced-fade-in_180ms_ease-out_forwards] bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative z-10 flex w-full max-w-2xl flex-col border border-border bg-surface-0 shadow-2xl mx-4 max-h-[80vh]">
+      <div className="panel-enter relative z-10 mx-4 flex max-h-[80vh] w-full max-w-2xl flex-col border border-border bg-surface-0 shadow-2xl">
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <div className="flex items-center gap-3">
             <ClipboardPaste size={14} className="text-accent" />
             <span className="text-[14px] font-semibold">Import Prompt</span>
             <div className="flex gap-0.5 ml-2">
-              <button onClick={() => setTab("text")} className={tabClass("text")}>
+              <button onClick={() => setTab("text")} className={`surface-lift ${tabClass("text")}`}>
                 <span className="flex items-center gap-1.5">
                   <FileText size={11} />
                   Text
                 </span>
               </button>
-              <button onClick={() => setTab("image")} className={tabClass("image")}>
+              <button onClick={() => setTab("image")} className={`surface-lift ${tabClass("image")}`}>
                 <span className="flex items-center gap-1.5">
                   <ImagePlus size={11} />
                   Image
@@ -213,9 +213,8 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
           </div>
           <button
             onClick={onClose}
-            className="grid h-7 w-7 place-items-center text-text-tertiary
-                       transition-[color,background-color] duration-150 ease-out
-                       hover:bg-surface-2 hover:text-text-secondary active:scale-95"
+            className="surface-lift grid h-7 w-7 place-items-center text-text-tertiary
+                       hover:bg-surface-2 hover:text-text-secondary"
           >
             <X size={13} />
           </button>
@@ -232,9 +231,7 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
                   <button
                     onClick={handleAIAnalyze}
                     disabled={loading || !text.trim()}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold
-                                transition-[transform,opacity,background-color,color] duration-150 ease-out
-                                active:scale-[0.97]
+                    className={`surface-lift inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold
                                 ${loading || !text.trim()
                                   ? "bg-surface-2 text-text-tertiary cursor-not-allowed opacity-50"
                                   : "bg-accent/12 text-accent hover:bg-accent/20"}`}
@@ -269,10 +266,9 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full border border-dashed border-border hover:border-accent/30
+                  className="surface-lift w-full border border-dashed border-border hover:border-accent/30
                              bg-surface-1/20 hover:bg-accent-muted/20
                              flex flex-col items-center justify-center gap-3 py-14
-                             transition-[border-color,background-color] duration-200 ease-out
                              cursor-pointer group"
                 >
                   <div className="grid h-12 w-12 place-items-center bg-surface-2/60 text-text-tertiary
@@ -309,9 +305,7 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
                         <button
                           onClick={handleImageAnalyze}
                           disabled={loading}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold
-                                      transition-[transform,opacity,background-color] duration-150 ease-out
-                                      active:scale-[0.97]
+                          className={`surface-lift inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold
                                       ${loading
                                         ? "bg-accent/50 text-white cursor-wait"
                                         : "bg-accent text-white hover:brightness-110"}`}
@@ -326,8 +320,8 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
                             setPreview(null);
                           }}
                           disabled={loading}
-                          className="px-3 py-1.5 text-[11px] font-medium text-text-tertiary
-                                     hover:text-text-secondary hover:bg-surface-2 transition-colors"
+                          className="surface-lift px-3 py-1.5 text-[11px] font-medium text-text-tertiary
+                                     hover:text-text-secondary hover:bg-surface-2"
                         >
                           Remove
                         </button>
@@ -353,8 +347,8 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
           {!hasKey && (
             <button
               onClick={() => { onClose(); onOpenSettings(); }}
-              className="w-full flex items-center gap-2.5 border border-accent/20 bg-accent/5 px-4 py-3 text-left
-                         hover:bg-accent/8 transition-colors"
+              className="surface-lift w-full flex items-center gap-2.5 border border-accent/20 bg-accent/5 px-4 py-3 text-left
+                         hover:bg-accent/8"
             >
               <Sparkles size={12} className="text-accent flex-shrink-0" />
               <span className="text-[11px] text-accent">
@@ -375,7 +369,7 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
               <span className="mb-2.5 block text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
                 Detected {filledFields.length} field{filledFields.length > 1 ? "s" : ""}
               </span>
-              <div className="space-y-1">
+              <div className="stagger-in space-y-1">
                 {filledFields.map(([key, value]) => (
                   <div
                     key={key}
@@ -401,9 +395,7 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
           <button
             onClick={handleImport}
             disabled={!preview}
-            className={`inline-flex items-center gap-1.5 px-4 py-1.5 text-[13px] font-semibold
-                        transition-[transform,opacity,background-color] duration-150 ease-out
-                        active:scale-[0.97]
+            className={`surface-lift inline-flex items-center gap-1.5 px-4 py-1.5 text-[13px] font-semibold
                         ${preview
                           ? "bg-accent text-white hover:brightness-110"
                           : "bg-surface-2 text-text-tertiary cursor-not-allowed opacity-50"

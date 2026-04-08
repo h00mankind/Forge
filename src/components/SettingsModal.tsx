@@ -47,9 +47,9 @@ export default memo(function SettingsModal({ open, onClose }: Props) {
       className="fixed inset-0 z-50 flex items-center justify-center"
       onKeyDown={handleKeyDown}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 animate-[reduced-fade-in_180ms_ease-out_forwards] bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative z-10 flex w-full max-w-md flex-col border border-border bg-surface-0 shadow-2xl mx-4">
+      <div className="panel-enter relative z-10 mx-4 flex w-full max-w-md flex-col border border-border bg-surface-0 shadow-2xl">
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <div className="flex items-center gap-2.5">
             <Settings size={14} className="text-accent" />
@@ -57,9 +57,8 @@ export default memo(function SettingsModal({ open, onClose }: Props) {
           </div>
           <button
             onClick={onClose}
-            className="grid h-7 w-7 place-items-center text-text-tertiary
-                       transition-[color,background-color] duration-150 ease-out
-                       hover:bg-surface-2 hover:text-text-secondary active:scale-95"
+            className="surface-lift grid h-7 w-7 place-items-center text-text-tertiary
+                       hover:bg-surface-2 hover:text-text-secondary"
           >
             <X size={13} />
           </button>
@@ -127,17 +126,15 @@ export default memo(function SettingsModal({ open, onClose }: Props) {
         <div className="flex items-center justify-end border-t border-border px-6 py-4 gap-2">
           <button
             onClick={onClose}
-            className="px-3 py-1.5 text-[13px] font-medium text-text-tertiary
-                       hover:text-text-secondary transition-colors"
+            className="surface-lift px-3 py-1.5 text-[13px] font-medium text-text-tertiary
+                       hover:text-text-secondary"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 text-[13px] font-semibold
-                       bg-accent text-white hover:brightness-110
-                       transition-[transform,opacity,background-color] duration-150 ease-out
-                       active:scale-[0.97]"
+            className="surface-lift inline-flex items-center gap-1.5 bg-accent px-4 py-1.5 text-[13px] font-semibold
+                       text-white hover:brightness-110"
           >
             Save
           </button>

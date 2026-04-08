@@ -47,7 +47,7 @@ export default memo(function LayerAccordion({
 
   return (
     <div
-      className={`border transition-[border-color,background-color] duration-200 ease-out ${
+      className={`surface-lift border ${
         open
           ? "border-border-strong bg-surface-1/40"
           : "border-border bg-transparent hover:border-border-strong/50"
@@ -58,7 +58,7 @@ export default memo(function LayerAccordion({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className="flex w-full items-center gap-3 px-4 py-3 text-left
-                   transition-[background-color] duration-150 ease-out
+                   transition-[background-color] duration-[160ms] ease-out
                    hover:bg-surface-2/30 active:scale-[0.998]"
       >
         <span className="flex-shrink-0 text-text-tertiary">{icon}</span>
@@ -75,7 +75,7 @@ export default memo(function LayerAccordion({
         </div>
         <ChevronRight
           size={13}
-          className={`flex-shrink-0 text-text-tertiary/50 transition-transform duration-200 ease-out ${
+          className={`flex-shrink-0 text-text-tertiary/50 transition-transform duration-[220ms] ease-[var(--ease-smooth)] ${
             open ? "rotate-90" : ""
           }`}
         />
@@ -85,7 +85,7 @@ export default memo(function LayerAccordion({
         ref={contentRef}
         aria-hidden={!open}
         style={{ height: height !== undefined ? `${height}px` : "auto" }}
-        className={`overflow-hidden transition-[height,opacity] duration-[260ms] ease-out ${
+        className={`overflow-hidden transition-[height,opacity] duration-[240ms] ease-[var(--ease-smooth)] ${
           !open ? "pointer-events-none" : ""
         }`}
       >
@@ -97,7 +97,7 @@ export default memo(function LayerAccordion({
             rows={2}
             className="w-full resize-none border border-border bg-surface-0 px-3 py-2.5 text-[13px]
                        text-text-primary placeholder:text-text-tertiary/40 outline-none
-                       transition-[border-color,box-shadow] duration-150 ease-out
+                       transition-[border-color,box-shadow,transform] duration-150 ease-out
                        focus:border-accent/40 focus:ring-1 focus:ring-accent/15
                        min-h-[56px]"
           />
