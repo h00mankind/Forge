@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef, useEffect, memo } from "react";
 import {
-  X,
   ClipboardPaste,
   ArrowRight,
   ImagePlus,
@@ -9,6 +8,15 @@ import {
   Upload,
   FileText,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { parsePromptInput } from "../utils/parsePrompt";
 import { parsePromptWithAI, extractPromptFromImage, hasAPIKey } from "../utils/ai";
 import { useToast } from "./Toast";
@@ -160,102 +168,75 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
     onClose();
   }, [preview, onImport, onClose]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "Enter" && e.metaKey && preview) handleImport();
-    },
-    [onClose, preview, handleImport]
-  );
-
-  if (!open) return null;
-
   const filledFields = preview
     ? Object.entries(preview).filter(([, v]) => v && v.trim())
     : [];
 
   const hasKey = hasAPIKey();
-  const tabClass = (t: Tab) =>
-    `px-3 py-1.5 text-[12px] font-semibold transition-[color,background-color] duration-150 ease-out ${
+
+  const tabBtnClass = (t: Tab) =>
+    `rounded-full px-3 text-[12px] font-semibold ${
       tab === t
-        ? "bg-accent/12 text-accent"
-        : "text-text-tertiary hover:text-text-secondary hover:bg-surface-2/70"
+        ? "bg-background text-foreground shadow-sm hover:bg-background"
+        : "text-muted-foreground hover:text-foreground hover:bg-transparent"
     }`;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      onKeyDown={handleKeyDown}
-      onDrop={handleDrop}
-      onDragOver={(e) => e.preventDefault()}
-    >
-      <div className="absolute inset-0 animate-[reduced-fade-in_180ms_ease-out_forwards] bg-black/70 backdrop-blur-sm" onClick={onClose} />
-
-      <div className="panel-enter relative z-10 mx-4 flex max-h-[80vh] w-full max-w-2xl flex-col border border-border bg-surface-0 shadow-2xl">
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
-          <div className="flex items-center gap-3">
-            <ClipboardPaste size={14} className="text-accent" />
-            <span className="text-[14px] font-semibold">Import Prompt</span>
-            <div className="flex gap-0.5 ml-2">
-              <button onClick={() => setTab("text")} className={`surface-lift ${tabClass("text")}`}>
-                <span className="flex items-center gap-1.5">
-                  <FileText size={11} />
-                  Text
-                </span>
-              </button>
-              <button onClick={() => setTab("image")} className={`surface-lift ${tabClass("image")}`}>
-                <span className="flex items-center gap-1.5">
-                  <ImagePlus size={11} />
-                  Image
-                </span>
-              </button>
+    <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent
+        className="max-w-2xl max-h-[80vh] flex flex-col"
+        onDrop={handleDrop}
+        onDragOver={(e: React.DragEvent) => e.preventDefault()}
+      >
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-3">
+            <ClipboardPaste size={14} className="text-primary" />
+            Import Prompt
+            <div className="inline-flex rounded-full bg-muted p-0.5 ml-2">
+              <Button variant="ghost" size="xs" onClick={() => setTab("text")} className={tabBtnClass("text")}>
+                <FileText size={11} />
+                Text
+              </Button>
+              <Button variant="ghost" size="xs" onClick={() => setTab("image")} className={tabBtnClass("image")}>
+                <ImagePlus size={11} />
+                Image
+              </Button>
             </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="surface-lift grid h-7 w-7 place-items-center text-text-tertiary
-                       hover:bg-surface-2 hover:text-text-secondary"
-          >
-            <X size={13} />
-          </button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto space-y-4">
           {tab === "text" && (
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-[12px] font-semibold text-text-secondary">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-[12px] font-semibold text-muted-foreground">
                   Paste your prompt below
                 </label>
                 {hasKey && (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="xs"
                     onClick={handleAIAnalyze}
                     disabled={loading || !text.trim()}
-                    className={`surface-lift inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold
-                                ${loading || !text.trim()
-                                  ? "bg-surface-2 text-text-tertiary cursor-not-allowed opacity-50"
-                                  : "bg-accent/12 text-accent hover:bg-accent/20"}`}
+                    className="gap-1.5 text-[11px] font-semibold text-primary"
                   >
                     {loading ? <Loader2 size={10} className="animate-spin" /> : <Sparkles size={10} />}
                     Analyze with AI
-                  </button>
+                  </Button>
                 )}
               </div>
-              <p className="mb-3 text-[11px] text-text-tertiary/70 leading-relaxed">
-                Supports labeled format (<code className="text-accent/60">[Subject] ... [Lighting] ...</code>),
+              <p className="text-[11px] text-tertiary/70 leading-relaxed">
+                Supports labeled format (<code className="text-primary/60">[Subject] ... [Lighting] ...</code>),
                 JSON objects, or plain text.
                 {hasKey && " Use \"Analyze with AI\" for smarter parsing."}
               </p>
-              <textarea
+              <Textarea
                 ref={textareaRef}
                 value={text}
                 onChange={(e) => handleTextChange(e.target.value)}
                 placeholder={'[Subject] A striking fashion model...\n[Action] Posing with a confident stance...\n[Lighting] Three-point softbox setup...'}
                 rows={6}
-                className="w-full resize-none border border-border bg-surface-1/40 px-4 py-3 text-[13px] font-mono
-                           text-text-primary placeholder:text-text-tertiary/30 outline-none
-                           transition-[border-color,box-shadow] duration-150 ease-out
-                           focus:border-accent/40 focus:ring-1 focus:ring-accent/15"
+                className="px-4 py-3 text-[13px] font-mono"
               />
             </div>
           )}
@@ -266,27 +247,27 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="surface-lift w-full border border-dashed border-border hover:border-accent/30
-                             bg-surface-1/20 hover:bg-accent-muted/20
+                  className="w-full border border-dashed border-border hover:border-primary/30
+                             bg-card/20 hover:bg-primary/5
                              flex flex-col items-center justify-center gap-3 py-14
                              cursor-pointer group"
                 >
-                  <div className="grid h-12 w-12 place-items-center bg-surface-2/60 text-text-tertiary
-                                  group-hover:bg-accent/12 group-hover:text-accent transition-[background-color,color] duration-200">
+                  <div className="grid h-12 w-12 place-items-center bg-muted/60 text-tertiary
+                                  group-hover:bg-primary/12 group-hover:text-primary transition-[background-color,color] duration-200">
                     <Upload size={18} />
                   </div>
                   <div className="text-center">
-                    <p className="text-[13px] font-medium text-text-secondary group-hover:text-text-primary transition-colors">
+                    <p className="text-[13px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                       Click to upload or drag and drop
                     </p>
-                    <p className="mt-1.5 text-[11px] text-text-tertiary/60">
+                    <p className="mt-1.5 text-[11px] text-tertiary/60">
                       JPG, PNG, WebP up to 20MB
                     </p>
                   </div>
                 </button>
               ) : (
                 <div className="space-y-3">
-                  <div className="flex items-start gap-4 border border-border bg-surface-1/30 p-4">
+                  <div className="flex items-start gap-4 border border-border bg-card/30 p-4">
                     {imagePreviewUrl && (
                       <img
                         src={imagePreviewUrl}
@@ -295,36 +276,35 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
                       />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-semibold text-text-primary truncate">
+                      <p className="text-[12px] font-semibold text-foreground truncate">
                         {imageData.name}
                       </p>
-                      <p className="mt-1 text-[11px] text-text-tertiary">
+                      <p className="mt-1 text-[11px] text-tertiary">
                         {imageData.mimeType}
                       </p>
                       <div className="mt-3 flex gap-2">
-                        <button
+                        <Button
+                          size="xs"
                           onClick={handleImageAnalyze}
                           disabled={loading}
-                          className={`surface-lift inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold
-                                      ${loading
-                                        ? "bg-accent/50 text-white cursor-wait"
-                                        : "bg-accent text-white hover:brightness-110"}`}
+                          className="gap-1.5 text-[11px] font-semibold"
                         >
                           {loading ? <Loader2 size={10} className="animate-spin" /> : <Sparkles size={10} />}
                           {loading ? "Analyzing..." : "Extract Prompt"}
-                        </button>
-                        <button
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="xs"
                           onClick={() => {
                             setImageData(null);
                             setImagePreviewUrl(null);
                             setPreview(null);
                           }}
                           disabled={loading}
-                          className="surface-lift px-3 py-1.5 text-[11px] font-medium text-text-tertiary
-                                     hover:text-text-secondary hover:bg-surface-2"
+                          className="text-[11px] font-medium text-tertiary"
                         >
                           Remove
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -347,18 +327,18 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
           {!hasKey && (
             <button
               onClick={() => { onClose(); onOpenSettings(); }}
-              className="surface-lift w-full flex items-center gap-2.5 border border-accent/20 bg-accent/5 px-4 py-3 text-left
-                         hover:bg-accent/8"
+              className="w-full flex items-center gap-2.5 border border-primary/20 bg-primary/5 px-4 py-3 text-left
+                         hover:bg-primary/8"
             >
-              <Sparkles size={12} className="text-accent flex-shrink-0" />
-              <span className="text-[11px] text-accent">
+              <Sparkles size={12} className="text-primary flex-shrink-0" />
+              <span className="text-[11px] text-primary">
                 Configure an API key in Settings to unlock AI-powered analysis
               </span>
             </button>
           )}
 
           {loading && tab === "text" && (
-            <div className="flex items-center gap-2 text-accent text-[12px]">
+            <div className="flex items-center gap-2 text-primary text-[12px]">
               <Loader2 size={12} className="animate-spin" />
               <span>AI is analyzing your prompt...</span>
             </div>
@@ -366,19 +346,19 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
 
           {filledFields.length > 0 && (
             <div>
-              <span className="mb-2.5 block text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
+              <span className="mb-2.5 block text-[10px] font-bold uppercase tracking-[0.12em] text-tertiary">
                 Detected {filledFields.length} field{filledFields.length > 1 ? "s" : ""}
               </span>
               <div className="stagger-in space-y-1">
                 {filledFields.map(([key, value]) => (
                   <div
                     key={key}
-                    className="flex gap-3 border border-border bg-surface-1/30 px-4 py-2.5"
+                    className="flex gap-3 border border-border bg-card/30 px-4 py-2.5"
                   >
-                    <span className="flex-shrink-0 text-[11px] font-semibold text-accent w-28">
+                    <span className="flex-shrink-0 text-[11px] font-semibold text-primary w-28">
                       {FIELD_LABELS[key] ?? key}
                     </span>
-                    <span className="text-[12px] text-text-secondary leading-relaxed line-clamp-2">
+                    <span className="text-[12px] text-muted-foreground leading-relaxed line-clamp-2">
                       {value}
                     </span>
                   </div>
@@ -388,24 +368,20 @@ export default memo(function PastePromptModal({ open, onClose, onImport, onOpenS
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-border px-6 py-4">
-          <span className="text-[11px] text-text-tertiary">
+        <DialogFooter className="flex-row items-center justify-between sm:justify-between">
+          <span className="text-[11px] text-tertiary">
             {preview ? `${filledFields.length} fields ready` : "Waiting for input..."}
           </span>
-          <button
+          <Button
             onClick={handleImport}
             disabled={!preview}
-            className={`surface-lift inline-flex items-center gap-1.5 px-4 py-1.5 text-[13px] font-semibold
-                        ${preview
-                          ? "bg-accent text-white hover:brightness-110"
-                          : "bg-surface-2 text-text-tertiary cursor-not-allowed opacity-50"
-                        }`}
+            className="gap-1.5"
           >
             Import
             <ArrowRight size={12} />
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 });

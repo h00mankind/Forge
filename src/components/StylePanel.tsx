@@ -1,11 +1,14 @@
 import { memo } from "react";
 import { PanelLeftClose, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { styleCategories } from "../data/presets";
 import type { StyleCategoryId } from "../data/presets";
 
 interface Props {
   activeCategory: StyleCategoryId | null;
-  onCategoryChange: (id: StyleCategoryId) => void;
+  onCategoryChange: (id: StyleCategoryId | null) => void;
   styleValue: string;
   onStyleChange: (value: string) => void;
   onCollapse: () => void;
@@ -21,19 +24,20 @@ export default memo(function StylePanel({
   onSelectStyle,
 }: Props) {
   return (
-    <div className="flex h-full flex-col overflow-y-auto bg-surface-1/30">
+    <div className="flex h-full flex-col overflow-y-auto bg-card/30">
       <div className="reveal-in flex items-center justify-between px-4 pt-4 pb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
+        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-tertiary">
           Style
         </span>
-        <button
+        <Button
+          variant="ghost"
+          size="icon-xs"
           onClick={onCollapse}
           aria-label="Hide style panel"
-          className="surface-lift hidden md:grid h-6 w-6 place-items-center text-text-tertiary
-                     hover:text-text-secondary hover:bg-surface-2"
+          className="hidden md:grid text-muted-foreground"
         >
           <PanelLeftClose size={12} />
-        </button>
+        </Button>
       </div>
 
       <div className="px-3 pb-3">
@@ -43,37 +47,36 @@ export default memo(function StylePanel({
             return (
               <div key={cat.id}>
                 <button
-                  onClick={() => onCategoryChange(cat.id)}
-                  className={`surface-lift flex w-full items-center justify-between px-3 py-2 text-left text-[13px] font-medium
-                              ${isActive
-                                ? "bg-accent/12 text-accent"
-                                : "text-text-secondary hover:bg-surface-2/70 hover:text-text-primary"
-                              }`}
+                  onClick={() => onCategoryChange(isActive ? null : cat.id)}
+                  className={`flex w-full items-center justify-between px-3 py-2 text-left text-[13px] font-medium transition-[color,background-color] ${
+                    isActive
+                      ? "bg-primary/12 text-primary"
+                      : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+                  }`}
                 >
                   <span>{cat.label}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] tabular-nums text-text-tertiary/60">
+                    <span className="text-[10px] tabular-nums text-tertiary/60">
                       {cat.styles.length}
                     </span>
                     <ChevronDown
                       size={11}
-                      className={`text-text-tertiary/50 transition-transform duration-[220ms] ease-[var(--ease-smooth)] ${isActive ? "rotate-180" : ""}`}
+                      className={`text-muted-foreground/50 transition-transform duration-200 ${isActive ? "rotate-180" : ""}`}
                     />
                   </div>
                 </button>
                 {isActive && (
                   <div className="stagger-in flex flex-wrap gap-1 px-3 py-2">
                     {cat.styles.map((s) => (
-                      <button
+                      <Button
                         key={s.id}
+                        variant="outline"
+                        size="xs"
                         onClick={() => onSelectStyle(s.prompt)}
-                        className="surface-lift micro-glow border border-border bg-surface-0 px-2 py-1
-                                   text-[11px] font-medium text-text-secondary whitespace-nowrap
-                                   hover:border-accent/30 hover:bg-accent-muted hover:text-accent
-                                   active:scale-[0.97]"
+                        className="text-muted-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-primary"
                       >
                         {s.label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 )}
@@ -83,22 +86,18 @@ export default memo(function StylePanel({
         </div>
       </div>
 
-      <div className="mx-4 border-t border-border" />
+      <Separator className="mx-4" />
 
       <div className="px-4 pt-4 pb-5">
-        <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
+        <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.12em] text-tertiary">
           Custom
         </span>
-        <textarea
+        <Textarea
           value={styleValue}
           onChange={(e) => onStyleChange(e.target.value)}
           placeholder="Add your own style keywords..."
           rows={2}
-          className="w-full resize-none border border-border bg-surface-0 px-3 py-2.5 text-[13px]
-                     text-text-primary placeholder:text-text-tertiary/50 outline-none
-                     transition-[border-color,box-shadow] duration-150 ease-out
-                     focus:border-accent/40 focus:ring-1 focus:ring-accent/15
-                     min-h-[52px]"
+          className="min-h-[52px] text-[13px]"
         />
       </div>
     </div>

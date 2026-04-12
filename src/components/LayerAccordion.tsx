@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, memo } from "react";
 import { ChevronRight } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import type { ReactNode } from "react";
 
 interface Props {
@@ -47,9 +48,9 @@ export default memo(function LayerAccordion({
 
   return (
     <div
-      className={`surface-lift border ${
+      className={`rounded-xl border transition-[border-color,background-color] ${
         open
-          ? "border-border-strong bg-surface-1/40"
+          ? "border-border-strong bg-card/40"
           : "border-border bg-transparent hover:border-border-strong/50"
       }`}
     >
@@ -58,24 +59,24 @@ export default memo(function LayerAccordion({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className="flex w-full items-center gap-3 px-4 py-3 text-left
-                   transition-[background-color] duration-[160ms] ease-out
-                   hover:bg-surface-2/30 active:scale-[0.998]"
+                   transition-[background-color] duration-150
+                   hover:bg-muted/30"
       >
-        <span className="flex-shrink-0 text-text-tertiary">{icon}</span>
+        <span className="flex-shrink-0 text-tertiary">{icon}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-[13px] font-semibold text-text-primary">
+            <span className="text-[13px] font-semibold text-foreground">
               {title}
             </span>
             {filled && (
-              <span className="h-1.5 w-1.5 bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]" />
             )}
           </div>
-          <span className="text-[11px] text-text-tertiary leading-tight">{description}</span>
+          <span className="text-[11px] text-tertiary leading-tight">{description}</span>
         </div>
         <ChevronRight
           size={13}
-          className={`flex-shrink-0 text-text-tertiary/50 transition-transform duration-[220ms] ease-[var(--ease-smooth)] ${
+          className={`flex-shrink-0 text-muted-foreground/50 transition-transform duration-200 ${
             open ? "rotate-90" : ""
           }`}
         />
@@ -90,16 +91,12 @@ export default memo(function LayerAccordion({
         }`}
       >
         <div className="space-y-3 px-4 pb-4 pt-1">
-          <textarea
+          <Textarea
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
             rows={2}
-            className="w-full resize-none border border-border bg-surface-0 px-3 py-2.5 text-[13px]
-                       text-text-primary placeholder:text-text-tertiary/40 outline-none
-                       transition-[border-color,box-shadow,transform] duration-150 ease-out
-                       focus:border-accent/40 focus:ring-1 focus:ring-accent/15
-                       min-h-[56px]"
+            className="min-h-[56px] text-[13px]"
           />
           {children}
         </div>

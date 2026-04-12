@@ -1,5 +1,7 @@
 import { useMemo, useCallback, useState, useRef, useEffect, memo } from "react";
 import { FileText, Layers, PanelRightClose, Image, Wand2, Eraser, ArrowRightLeft, Type } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import OutputToggle from "./OutputToggle";
 import type { OutputMode } from "./OutputToggle";
 import CopyButton from "./CopyButton";
@@ -74,17 +76,18 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
   return (
     <div className="flex h-full min-h-0 flex-col overflow-y-auto">
       <div className="reveal-in flex items-center justify-between px-4 pt-4 pb-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-tertiary">
+        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-tertiary">
           Purpose
         </span>
-        <button
+        <Button
+          variant="ghost"
+          size="icon-xs"
           onClick={onCollapse}
           aria-label="Hide output panel"
-          className="surface-lift hidden md:grid h-6 w-6 place-items-center text-text-tertiary
-                     hover:text-text-secondary hover:bg-surface-2"
+          className="hidden md:grid text-muted-foreground"
         >
           <PanelRightClose size={12} />
-        </button>
+        </Button>
       </div>
 
       <div className="border-b border-border px-3 pb-3">
@@ -93,11 +96,11 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
             <button
               key={id}
               onClick={() => onTypeChange(id)}
-              className={`surface-lift flex items-center gap-2.5 px-3 py-2 text-left text-[13px] font-medium
-                          ${id === promptType
-                            ? "bg-accent/12 text-accent"
-                            : "text-text-secondary hover:bg-surface-2/70 hover:text-text-primary"
-                          }`}
+              className={`flex items-center gap-2.5 px-3 py-2 text-left text-[13px] font-medium transition-[color,background-color] ${
+                id === promptType
+                  ? "bg-primary/12 text-primary"
+                  : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+              }`}
             >
               <Icon size={13} className="flex-shrink-0" />
               {label}
@@ -108,8 +111,8 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
 
       <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2.5">
-          <FileText size={13} className="flex-shrink-0 text-text-tertiary" />
-          <span className="flex-shrink-0 text-[13px] font-semibold text-text-secondary">
+          <FileText size={13} className="flex-shrink-0 text-tertiary" />
+          <span className="flex-shrink-0 text-[13px] font-semibold text-muted-foreground">
             Output
           </span>
           <OutputToggle value={mode} onChange={setMode} />
@@ -120,23 +123,23 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
       </div>
 
       <div className="flex items-center px-5 py-2">
-        <span className="flex items-center gap-1 border border-border bg-surface-2/60 px-2 py-0.5 text-[10px] font-semibold tabular-nums text-text-tertiary">
+        <Badge variant="outline" className="gap-1 text-[10px] tabular-nums text-tertiary">
           <Layers size={9} />
           {filled}/{TOTAL_LAYERS}
-        </span>
+        </Badge>
       </div>
 
       <div ref={containerRef} className="flex-1 overflow-y-auto p-5">
         {isEmpty ? (
           <div className="reveal-in flex h-full items-center justify-center">
             <div className="text-center">
-              <div className="mx-auto mb-3 grid h-10 w-10 place-items-center bg-surface-2/50 text-text-tertiary/60">
+              <div className="mx-auto mb-3 grid h-10 w-10 place-items-center bg-muted/50 text-muted-foreground">
                 <FileText size={16} />
               </div>
-              <p className="text-[13px] font-medium text-text-tertiary">
+              <p className="text-[13px] font-medium text-muted-foreground">
                 Start building your prompt
               </p>
-              <p className="mt-1.5 text-[11px] text-text-tertiary/50 max-w-[200px] mx-auto leading-relaxed">
+              <p className="mt-1.5 text-[11px] text-muted-foreground/50 max-w-[200px] mx-auto leading-relaxed">
                 Fill in layers to see your assembled prompt here
               </p>
             </div>
@@ -144,10 +147,8 @@ export default memo(function PreviewPanel({ layers, promptType, onTypeChange, on
         ) : (
           <pre
             key={`${mode}-${promptType}`}
-            className={`whitespace-pre-wrap break-words font-mono leading-[1.7] ${
-              mode === "json"
-                ? "reveal-in text-[12px] text-accent/90"
-                : "reveal-in text-[13px] text-text-primary"
+            className={`reveal-in whitespace-pre-wrap break-words font-mono leading-[1.7] ${
+              mode === "json" ? "text-[12px] text-primary/90" : "text-[13px] text-foreground"
             }`}
             style={estimatedHeight > 0 ? { minHeight: estimatedHeight } : undefined}
           >

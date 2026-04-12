@@ -1,4 +1,4 @@
-import { useMemo, useRef, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import { prepare, layout } from "@chenglou/pretext";
 
 interface MeasureResult {
@@ -45,22 +45,3 @@ export function useTextMeasure() {
   return { measure, clearCache };
 }
 
-export function useEstimatedHeight(
-  text: string,
-  width: number,
-  variant: "default" | "json" = "default"
-): number {
-  const prepared = useMemo(() => {
-    if (!text) return null;
-    const font = variant === "json" ? FONT_MONO_SM : FONT_MONO;
-    return prepare(text, font, { whiteSpace: "pre-wrap" });
-  }, [text, variant]);
-
-  return useMemo(() => {
-    if (!prepared || width <= 0) return 0;
-    const fontSize = variant === "json" ? 12 : 13;
-    const lh = variant === "json" ? LINE_HEIGHT_SM : LINE_HEIGHT;
-    const { height } = layout(prepared, width, fontSize * lh);
-    return height;
-  }, [prepared, width, variant]);
-}

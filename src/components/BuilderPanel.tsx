@@ -149,7 +149,7 @@ export default memo(function BuilderPanel({ layers, setLayer, styleCategory }: P
             />
           </LayerAccordion>
 
-          <div className="surface-lift lg:col-span-2 border border-border bg-transparent p-5">
+          <div className="lg:col-span-2 rounded-xl border border-border p-5">
             <TextInImageFields
               textContent={layers.textContent}
               textFont={layers.textFont}

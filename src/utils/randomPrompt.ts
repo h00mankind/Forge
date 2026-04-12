@@ -58,7 +58,7 @@ const SETTINGS = [
   "an alien landscape with twin suns and violet vegetation",
 ];
 
-export interface RandomResult {
+interface RandomResult {
   layers: Partial<PromptLayers>;
   categoryId: StyleCategoryId;
 }

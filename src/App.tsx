@@ -103,7 +103,7 @@ export default function App() {
   const hideRight = useCallback(() => setRightOpen(false), []);
 
   return (
-    <div className="app-shell flex h-screen flex-col bg-surface-0">
+    <div className="app-shell flex h-screen flex-col bg-background">
       <Header
         onReset={reset}
         onPaste={openPaste}

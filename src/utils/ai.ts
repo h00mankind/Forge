@@ -4,7 +4,7 @@ import type { StyleCategoryId } from "../data/presets";
 const STORAGE_KEY = "ai-config";
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-export interface AIConfig {
+interface AIConfig {
   apiKey: string;
   model: string;
 }
@@ -159,7 +159,7 @@ export async function extractPromptFromImage(
   return extractLayers(content);
 }
 
-export interface AIGenerateResult {
+interface AIGenerateResult {
   layers: Partial<PromptLayers>;
   categoryId?: StyleCategoryId;
 }

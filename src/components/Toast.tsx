@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useState, memo } from "react";
 import { X, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ToastItem {
   id: number;
@@ -51,12 +52,14 @@ const ToastMessage = memo(function ToastMessage({
         ? <AlertCircle size={13} className="mt-0.5 flex-shrink-0" />
         : <CheckCircle2 size={13} className="mt-0.5 flex-shrink-0" />}
       <span className="text-[12px] leading-relaxed flex-1">{toast.message}</span>
-      <button
+      <Button
+        variant="ghost"
+        size="icon-xs"
         onClick={() => onDismiss(toast.id)}
-        className="flex-shrink-0 mt-0.5 opacity-50 hover:opacity-100 transition-opacity duration-150 ease-out"
+        className="flex-shrink-0 mt-0.5 opacity-50 hover:opacity-100"
       >
         <X size={11} />
-      </button>
+      </Button>
     </div>
   );
 });

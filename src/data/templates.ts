@@ -37,10 +37,3 @@ export const templates: TemplateMap = {
   },
 };
 
-export const promptTypeLabels: Record<PromptType, string> = {
-  "text-to-image": "Text-to-Image",
-  multimodal: "Multimodal",
-  inpainting: "Inpainting",
-  "style-transfer": "Style Transfer",
-  "text-rendering": "Text Rendering",
-};

@@ -39,10 +39,10 @@ export default memo(function ResizeHandle({ onResize, side }: Props) {
     <div
       onPointerDown={onPointerDown}
       className="hidden md:flex w-1 flex-shrink-0 cursor-col-resize items-center justify-center
-                 group hover:bg-accent/8 active:bg-accent/15
+                 group hover:bg-primary/8 active:bg-primary/15
                  transition-colors duration-100"
     >
-      <div className="h-6 w-px bg-border group-hover:bg-accent/40 group-active:bg-accent transition-colors duration-100" />
+      <div className="h-6 w-px bg-border group-hover:bg-primary/40 group-active:bg-primary transition-colors duration-100" />
     </div>
   );
 });

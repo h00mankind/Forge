@@ -24,7 +24,7 @@ export interface PromptLayers {
 
 export type LayerKey = keyof PromptLayers;
 
-export interface PromptState {
+interface PromptState {
   type: PromptType;
   layers: PromptLayers;
 }

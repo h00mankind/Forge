@@ -52,7 +52,7 @@ export type StyleCategoryId =
   | "cinematic"
   | "experimental";
 
-export interface StyleCategory {
+interface StyleCategory {
   id: StyleCategoryId;
   label: string;
   styles: Preset[];
